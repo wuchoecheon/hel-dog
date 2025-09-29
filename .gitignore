@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.mypy_cache/
+.pytest_cache/
+htmlcov/
+.nox/
+
+# Editor/OS specific
+.DS_Store
+.vscode/
+*.sublime-project
+*.sublime-workspace
+Thumbs.db
+
+# FastAPI/Uvicorn specific
+.uvicorn/
+.uvicorn_reload/
+*.log
+
+# Database files (if using SQLite)
+*.db
+*.sqlite3
+
+# Environment variables
+.env
+.env.*
