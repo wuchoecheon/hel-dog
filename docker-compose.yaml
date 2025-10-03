@@ -1,10 +1,10 @@
 services:
   postgres:
     image: postgres:16
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: test_db
+    env_file:
+      - .env.db
+    networks:
+      - conn
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
     healthcheck:
@@ -18,9 +18,19 @@ services:
     build: .
     ports:
       - "8000:8000"
+    networks:
+      - conn
+    env_file:
+      - .env.app
+    command: >
+      sh -c "alembic revision --autogenerate && alembic upgrade head && uv run src/main.py"
     depends_on:
       postgres:
         condition: service_healthy
+
+networks:
+  conn:
+    driver: bridge
 
 volumes:
   postgres-db-volume:
