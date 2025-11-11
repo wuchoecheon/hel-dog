@@ -27,6 +27,7 @@ Thumbs.db
 .uvicorn/
 .uvicorn_reload/
 *.log
+migrations/versions/*
 
 # Database files (if using SQLite)
 *.db
