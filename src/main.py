@@ -8,11 +8,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.auth import router as auth_router
-
+from src.robot.router import router as robot_router
 
 app = FastAPI()
 
 app.include_router(auth_router)
+app.include_router(robot_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
