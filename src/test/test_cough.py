@@ -52,14 +52,27 @@ def test_create_cough_log():
     assert response.status_code == 200
 
 
-def test_create_cough_log():
+def test_get_cough_log():
     setup()
 
-    response = client.post(
+    NUM = 100
+
+    for _ in range(NUM):
+        client.post(
+            "/api/cough/",
+            json={
+                "robot_id": "robot"
+            }
+        )
+
+    token = get_token()
+
+    response = client.get(
         "/api/cough/",
-        json={
-            "robot_id": "robot"
-        }
+        headers={"Authorization" : token}
     )
 
+    body = response.json()
+
     assert response.status_code == 200
+    assert body["cough_num"] == NUM+1

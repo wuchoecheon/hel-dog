@@ -10,7 +10,7 @@ from src.cough.models import CoughLog
 
 from src.cough.schemas import CoughLogSchema
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 router = APIRouter(
     prefix="/api/cough"
@@ -36,7 +36,20 @@ def get_cough_log(
         user: User=Depends(get_user),
         db: Session=Depends(get_db)
     ):
-    ...
+    three_hours_ago = datetime.now() - timedelta(hours=3)
+
+    coughs = db.query(CoughLog).filter(
+        CoughLog.user == user.email 
+        and CoughLog.timestamp >= three_hours_ago
+    ).all()
+
+    return {
+        "response": "request proceed successfully",
+        "cough_num": len(coughs),
+        "cough_log": coughs
+    }
+
+
 
 @router.post("/detail")
 def get_cough_log_detail(
