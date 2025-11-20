@@ -10,6 +10,7 @@ if str(ROOT) not in sys.path:
 from src.auth import router as auth_router
 from src.robot.router import router as robot_router
 from src.device import router as device_router
+from src.fall import router as fall_router
 from src.cough import router as cough_router
 from src.sleep import router as sleep_router
 
@@ -19,6 +20,7 @@ app = FastAPI()
 app.include_router(auth_router)
 app.include_router(robot_router)
 app.include_router(device_router)
+app.include_router(fall_router)
 app.include_router(cough_router)
 app.include_router(sleep_router)
 
