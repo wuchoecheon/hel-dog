@@ -56,8 +56,4 @@ def test_create_healthdata():
         }
     )
 
-    print()
-    print()
-    print()
-
     assert response.status_code == 200
