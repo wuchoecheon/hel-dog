@@ -2,11 +2,9 @@ services:
   postgres:
     image: postgres:16
     env_file:
-      - .env.db
+      - .env_db
     networks:
       - conn
-    volumes:
-      - postgres-db-volume:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
@@ -21,7 +19,7 @@ services:
     networks:
       - conn
     env_file:
-      - .env.app
+      - .env_app
     command: >
       sh -c "alembic revision --autogenerate && alembic upgrade head && uv run src/main.py"
     depends_on:
@@ -31,6 +29,3 @@ services:
 networks:
   conn:
     driver: bridge
-
-volumes:
-  postgres-db-volume:
