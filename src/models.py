@@ -5,3 +5,4 @@ from src.robot.models import Robot
 from src.device.models import Device
 from src.cough.models import CoughLog
 from src.sleep.models import SleepLog
+from src.health.models import HealthData
