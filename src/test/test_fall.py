@@ -4,11 +4,12 @@ from src.main import app
 from datetime import datetime, timedelta
 
 client = TestClient(app)
-def get_token():
+
+def get_token(email="user@example.com"):
     _ = client.post(
         "/api/auth/signup",
         json={
-            "email": "user@example.com",
+            "email": email,
             "password": "asdf1234",
             "password2": "asdf1234",
         }
@@ -16,7 +17,7 @@ def get_token():
     login = client.post(
         "/api/auth/login",
         json={
-            "email": "user@example.com",
+            "email": email,
             "password": "asdf1234",
         }
     )
@@ -30,8 +31,9 @@ def get_token():
 
     return headers
 
-def register_robot(robot_id="r"):
-    headers = get_token()
+def register_robot(robot_id="r", headers=None):
+    if headers is None:
+        headers = get_token()
 
     register = client.post(
         "/api/robot/register",
@@ -45,14 +47,11 @@ def register_robot(robot_id="r"):
 
 def test_fall_log():
     robot_id = "fall1"
-    register_robot(robot_id)
+    headers = get_token()
+    register_robot(robot_id, headers=headers)
 
     response = client.post(
-        "/api/fall/log",
-        json={
-            "robot_id": robot_id,
-            "label": "fall",
-        },
+        f"/api/fall/{robot_id}",
     )
 
     assert response.status_code == 200
@@ -60,52 +59,23 @@ def test_fall_log():
 
 def test_fall_log_invalid_robot():
     response = client.post(
-        "/api/fall/log",
-        json={
-            "robot_id": "invalidRobot",
-            "label": "fall",
-        },
+        "/api/fall/invalidRobot",
     )
 
     assert response.status_code == 400
 
 def test_get_fall_today():
-    headers = get_token()
+    headers = get_token(email="user2@example.com")
 
     robot_id = "fall2"
-    register_robot(robot_id)
+    register_robot(robot_id, headers=headers)
 
     # 오늘 fall log
     _ = client.post(
-        "/api/fall/log",
-        json={
-            "robot_id": robot_id,
-            "label": "fall",
-        },
+        f"/api/fall/{robot_id}",
     )
     _ = client.post(
-        "/api/fall/log",
-        json={
-            "robot_id": robot_id,
-            "label": "fall",
-        },
-    )
-    # 오늘 normal log
-    _ = client.post(
-        "/api/fall/log",
-        json={
-            "robot_id": robot_id,
-            "label": "normal",
-        },
-    )
-    # 어제 fall log
-    _ = client.post(
-        "/api/fall/log",
-        json={
-            "robot_id": robot_id,
-            "label": "fall",
-            "occurred_at": (datetime.now() - timedelta(days=1)).isoformat(),
-        }
+        f"/api/fall/{robot_id}",
     )
 
     response = client.get(
@@ -115,7 +85,6 @@ def test_get_fall_today():
     assert response.status_code == 200
 
     data = response.json()
-    logs = [item for item in data if item["robot_id"] == robot_id]
 
-    assert len(logs) == 2
-    assert all(item["label"] == "fall" for item in logs)
+    assert data["fall_num"] == 2
+    assert len(data["fall_log"]) == 2

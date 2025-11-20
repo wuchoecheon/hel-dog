@@ -3,10 +3,9 @@ from sqlalchemy.sql import func
 
 from src.database import Base
 
-class Fall(Base):
-    __tablename__ = "fall"
+class FallLog(Base):
+    __tablename__ = "fall_log"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    robot_id = Column(String, ForeignKey("robot.robot_id", ondelete="CASCADE"))
-    label = Column(String) # fall/normal
-    occurred_at = Column(DateTime(timezone=True), server_default=func.now())
+    id = Column(Integer, primary_key=True)
+    user = Column(String, ForeignKey("user.email", ondelete="CASCADE"), index=True)
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
