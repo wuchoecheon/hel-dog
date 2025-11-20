@@ -43,10 +43,7 @@ def test_create_cough_log():
     setup()
 
     response = client.post(
-        "/api/cough/",
-        json={
-            "robot_id": "robot"
-        }
+        "/api/cough/robot",
     )
 
     assert response.status_code == 200
@@ -59,10 +56,7 @@ def test_get_cough_log():
 
     for _ in range(NUM):
         client.post(
-            "/api/cough/",
-            json={
-                "robot_id": "robot"
-            }
+            "/api/cough/robot",
         )
 
     token = get_token()

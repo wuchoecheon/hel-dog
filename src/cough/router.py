@@ -8,7 +8,6 @@ from src.auth.utils import get_user
 from src.robot.utils import map_robot_to_user
 from src.cough.models import CoughLog
 
-from src.cough.schemas import CoughLogSchema
 
 from datetime import datetime, timedelta
 
@@ -16,14 +15,13 @@ router = APIRouter(
     prefix="/api/cough"
 )
 
-@router.post("")
+@router.post("/{robot_id}")
 def create_cough_log(
-        body: CoughLogSchema,
-        db: Session=Depends(get_db)
-    ):
-    user = map_robot_to_user(body.robot_id, db)
+    robot_id: str,
+    user: Annotated[User, Depends(map_robot_to_user)],
+    db: Annotated[Session, Depends(get_db)],
+):
     db_cough_log = CoughLog(user=user, timestamp=datetime.now())
-
     db.add(db_cough_log)
     db.commit()
     db.refresh(db_cough_log)
