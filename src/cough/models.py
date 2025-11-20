@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, ForeignKey, Time, Integer
+from sqlalchemy import Column, String, ForeignKey, DateTime, Integer
 
 from src.database import Base
 
@@ -7,4 +7,4 @@ class CoughLog(Base):
 
     id = Column(Integer, primary_key=True) 
     user = Column(String, ForeignKey("user.email", ondelete="CASCADE"), index=True)
-    timestamp = Column(Time)
+    timestamp = Column(DateTime(timezone=True), nullable=False)

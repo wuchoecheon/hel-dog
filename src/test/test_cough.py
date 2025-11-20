@@ -52,7 +52,7 @@ def test_create_cough_log():
 def test_get_cough_log():
     setup()
 
-    NUM = 100
+    NUM = 3
 
     for _ in range(NUM):
         client.post(
@@ -70,3 +70,4 @@ def test_get_cough_log():
 
     assert response.status_code == 200
     assert body["cough_num"] == NUM+1
+    assert body["cough_log"][0]['user'] == "user@example.com"

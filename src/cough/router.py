@@ -37,8 +37,8 @@ def get_cough_log(
     three_hours_ago = datetime.now() - timedelta(hours=3)
 
     coughs = db.query(CoughLog).filter(
-        CoughLog.user == user.email 
-        and CoughLog.timestamp >= three_hours_ago
+        CoughLog.user == user.email,
+        CoughLog.timestamp >= three_hours_ago
     ).all()
 
     return {
@@ -54,4 +54,29 @@ def get_cough_log_detail(
         user: User=Depends(get_user),
         db: Session=Depends(get_db)
     ):
-    ...
+    now = datetime.now()
+    one_week_ago = now - timedelta(days=7)
+
+    coughs = (
+        db.query(CoughLog)
+        .filter(
+            CoughLog.user == user,
+            CoughLog.timestamp >= one_week_ago,
+        )
+        .all()
+    )
+
+    daily_counts = [0] * 7
+
+    for c in coughs:
+        diff = now - c.timestamp
+        days_ago = int(diff.total_seconds() // 86400) + 1
+
+        if 1 <= days_ago <= 7:
+            daily_counts[days_ago - 1] += 1
+
+    return {
+        "response": "request proceed successfully",
+        "daily_counts": daily_counts,
+        "total_coughs": len(coughs),
+    }
