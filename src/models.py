@@ -4,3 +4,5 @@ from src.auth.models import User
 from src.robot.models import Robot
 from src.device.models import Device
 from src.fall.models import FallLog
+from src.cough.models import CoughLog
+from src.sleep.models import SleepLog
