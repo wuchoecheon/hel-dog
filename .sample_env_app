@@ -5,3 +5,9 @@ DB_PASSWORD=postgres
 DB_NAME=test_db
 SQLALCHEMY_DATABASE_URL=postgresql+psycopg2://postgres:postgres@postgres:5432/test_db
 SECRET_KEY=asdf1234
+
+
+FCM_APIKEY=path/to/fcm
+FIREBASE_PROJECT_ID=this_is_project_id
+
+ACCESS_TOKEN_EXPIRE_MINUTES=30000

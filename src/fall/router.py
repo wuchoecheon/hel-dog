@@ -10,12 +10,15 @@ from src.robot.models import Robot
 from src.robot.utils import map_robot_to_user
 from src.fall.models import FallLog
 from src.fall.service import summarize_today_falls
+from src.fall.schemas import CreateFallLogResponse, GetFallLogResponse # New import
+
+from datetime import datetime, timedelta
 
 router = APIRouter(
     prefix="/api/fall"
 )
 
-@router.post("/{robot_id}")
+@router.post("/{robot_id}", response_model=CreateFallLogResponse) # Added response_model
 def create_fall_log(
     robot_id: str,
     user_email: Annotated[str, Depends(map_robot_to_user)],
@@ -33,7 +36,7 @@ def create_fall_log(
     return {"response": "fall log saved"}
 
 
-@router.get("")
+@router.get("", response_model=GetFallLogResponse) # Added response_model
 def get_fall_log(
     user: Annotated[User, Depends(get_user)],
     db: Session=Depends(get_db),

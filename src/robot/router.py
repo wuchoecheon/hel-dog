@@ -6,13 +6,13 @@ from src.database import get_db
 from src.auth.models import User
 from src.auth.utils import get_user
 from src.robot.models import Robot
-from src.robot.schemas import RegisterSchema
+from src.robot.schemas import RegisterSchema, RegisterRobotResponse # Updated import
 
 router = APIRouter(
     prefix="/api/robot"
 )
 
-@router.post("/register")
+@router.post("/register", response_model=RegisterRobotResponse) # Added response_model
 def register_robot(
     body: RegisterSchema,
     user: Annotated[User, Depends(get_user)],

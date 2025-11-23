@@ -27,3 +27,11 @@ class LoginSchema(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+
+class SignupResponse(BaseModel):
+    response: str
+
+
+class CheckResponse(BaseModel):
+    email: EmailStr

@@ -8,6 +8,7 @@ from src.auth.utils import get_user
 from src.robot.utils import map_robot_to_user
 from src.cough.models import CoughLog
 from src.cough.service import summarize_cough_last_3h, summarize_cough_last_week
+from src.cough.schemas import CreateCoughLogResponse, GetCoughLogResponse, GetCoughLogDetailResponse # New import
 
 from datetime import datetime, timedelta
 
@@ -15,7 +16,7 @@ router = APIRouter(
     prefix="/api/cough"
 )
 
-@router.post("/{robot_id}")
+@router.post("/{robot_id}", response_model=CreateCoughLogResponse) # Added response_model
 def create_cough_log(
     robot_id: str,
     user: Annotated[User, Depends(map_robot_to_user)],
@@ -29,7 +30,7 @@ def create_cough_log(
     return {"response": "signup success!"}
 
 
-@router.get("")
+@router.get("", response_model=GetCoughLogResponse) # Added response_model
 def get_cough_log(
         user: User=Depends(get_user),
         db: Session=Depends(get_db)
@@ -47,7 +48,7 @@ def get_cough_log(
 
 
 
-@router.post("/detail")
+@router.post("/detail", response_model=GetCoughLogDetailResponse) # Added response_model
 def get_cough_log_detail(
         user: User=Depends(get_user),
         db: Session=Depends(get_db)
