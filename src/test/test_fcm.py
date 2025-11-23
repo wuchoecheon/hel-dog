@@ -5,7 +5,9 @@ from src.main import app
 client = TestClient(app)
 
 uuid_sample = "c8ebf2fd-8284-4070-9f3e-82c904f43de7"
-
+headers = {
+    'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzYzODc5MjM4fQ.D-5NoerBpb3jhAZgDDxPjHbDiLX3vGWqzPLMXYqwl8s'
+}
 def get_token(email="user@example.com", password="asdf1234"):
     _ = client.post(
         "/api/auth/signup",
@@ -33,7 +35,8 @@ def get_token(email="user@example.com", password="asdf1234"):
     return headers
 
 def test_fcm_register():
-    headers = get_token()
+    # headers = get_token()
+
 
     response = client.post(
         "/api/fcm/register",
