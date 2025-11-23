@@ -9,6 +9,7 @@ from src.auth.utils import get_user
 from src.robot.models import Robot
 from src.robot.utils import map_robot_to_user
 from src.fall.models import FallLog
+from src.fall.service import summarize_today_falls
 
 router = APIRouter(
     prefix="/api/fall"
@@ -38,27 +39,9 @@ def get_fall_log(
     db: Session=Depends(get_db),
 ):
 
-    falls = (
-        db.query(FallLog)
-        .filter(
-            FallLog.user == user.email,
-            func.date(FallLog.timestamp) == func.current_date(),
-        )
-        .order_by(FallLog.timestamp.desc())
-        .all()
-    )
+    summary = summarize_today_falls(db=db, user_email=user.email)
 
-    fall_log = [
-        {
-            "timestamp": f.timestamp.isoformat() if f.timestamp else None,
-        }
-        for f in falls
-    ]
-
-    data = {
-        "response": "request proceed successfully",
-        "fall_num": len(falls),
-        "fall_log": fall_log
+    return {
+        "response": "request proceeded successfully",
+        **summary
     }
-
-    return data
