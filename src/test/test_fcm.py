@@ -33,7 +33,8 @@ def get_token(email="user@example.com", password="asdf1234"):
     return headers
 
 def test_fcm_register():
-    headers = get_token()
+    # headers = get_token()
+
 
     response = client.post(
         "/api/fcm/register",
