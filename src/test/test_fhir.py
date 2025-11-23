@@ -5,7 +5,6 @@ import xml.etree.ElementTree as ET
 
 client = TestClient(app)
 
-
 def get_token():
     _ = client.post(
         "/api/auth/signup",
@@ -25,22 +24,27 @@ def get_token():
     )
 
     body = login.json()
-    return "{} {}".format(body["token_type"], body["access_token"])
+    token = "{} {}".format(body["token_type"], body["access_token"])
+    return token
 
 
-def setup():
+def setup(robot_id: str = "robot", device_id: str = "device"):
     token = get_token()
 
-    client.post(
+    _ = client.post(
         "/api/robot/register",
         headers={"Authorization": token},
-        json={"robot_id": "robot"}
+        json={
+            "robot_id": robot_id,
+        }
     )
 
-    client.post(
+    _ = client.post(
         "/api/device/register",
         headers={"Authorization": token},
-        json={"device_id": "device"}
+        json={
+            "device_id": device_id,
+        }
     )
 
     return token
@@ -66,7 +70,7 @@ def test_fhir_export_basic():
 
     res = client.get(
         "/api/fhir/export",
-        params={"user_email": "user@example.com"}
+        headers={"Authorization": token},
     )
 
     assert res.status_code == 200

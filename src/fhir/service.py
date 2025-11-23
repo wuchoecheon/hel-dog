@@ -1,6 +1,11 @@
 from dataclasses import dataclass
 from datetime import datetime
 from sqlalchemy.orm import Session
+from typing import Annotated
+from fastapi import Depends
+
+from src.auth.models import User
+from src.auth.utils import get_user
 
 from src.cough.service import summarize_cough_last_3h
 #from src.stress.service import summarize_stress_last_12h
@@ -51,7 +56,7 @@ def get_cough_summary(user_email: str, db: Session) -> CoughSummary | None:
     )
 
 '''
-def get_stress_summary(user_email: str, db: Session) -> StressSummary | None:
+def get_stress_summary(user: Annotated[User, Depends(get_user)],, db: Session) -> StressSummary | None:
     summary = summarize_stress_last_12h(db, user_email)
     if summary is None:
         return None
@@ -72,7 +77,7 @@ def get_sleep_summary(user_email: str, db: Session) -> SleepSummary | None:
     )
 
 '''
-def get_posture_summary(user_email: str, db: Session) -> PostureSummary | None:
+def get_posture_summary(user: Annotated[User, Depends(get_user)],, db: Session) -> PostureSummary | None:
     summary = summarize_posture_last_3h(db, user_email)
     if summary is None:
         return None
@@ -93,12 +98,12 @@ def get_fall_summary(user_email: str, db: Session) -> FallSummary | None:
         fall_count_24h=summary["fall_count_24h"]
     )
 
-def build_fhir_bundle_for_user(user_email: str, db: Session) -> bytes | None:
-    cough = get_cough_summary(user_email, db)
-    #stress = get_stress_summary(user_email, db)
-    sleep = get_sleep_summary(user_email, db)
-    #posture = get_posture_summary(user_email, db)
-    fall = get_fall_summary(user_email, db)
+def build_fhir_bundle_for_user(user: User, db: Session) -> bytes | None:
+    cough = get_cough_summary(user_email=user.email, db=db)
+    #stress = get_stress_summary(user_email=user.email, db=db)
+    sleep = get_sleep_summary(user_email=user.email, db=db)
+    #posture = get_posture_summary(user_email=user.email, db=db)
+    fall = get_fall_summary(user_email=user.email, db=db)
 
     #if not any([cough, stress, sleep, posture, fall]):
     #    return None
@@ -114,7 +119,7 @@ def build_fhir_bundle_for_user(user_email: str, db: Session) -> bytes | None:
     )
 
     xml_bytes = build_fhir_bundle_xml(
-        user_id=user_email,
+        user_id=user.email,
         data=data_bundle
     )
 
