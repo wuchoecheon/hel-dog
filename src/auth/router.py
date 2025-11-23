@@ -4,14 +4,14 @@ from sqlalchemy.orm import Session
 
 from src.database import get_db
 from src.auth.models import User
-from src.auth.schemas import SignupSchema, LoginSchema, Token
+from src.auth.schemas import SignupSchema, LoginSchema, Token, SignupResponse, CheckResponse
 from src.auth.utils import hashpw, checkpw, create_access_token, get_user
 
 router = APIRouter(
     prefix="/api/auth"
 )
 
-@router.post("/signup")
+@router.post("/signup", response_model=SignupResponse)
 def auth_signup(user: SignupSchema, db: Session=Depends(get_db)):
     db_user = db.query(User).filter(User.email == user.email).first()
     if db_user:
@@ -31,7 +31,7 @@ def auth_signup(user: SignupSchema, db: Session=Depends(get_db)):
     return {"response": "signup success!"}
 
 
-@router.post("/login")
+@router.post("/login", response_model=Token)
 def auth_login(user: LoginSchema, db: Annotated[Session, Depends(get_db)]):
     db_user = db.query(User).filter(User.email == user.email).first()
     if not db_user:
@@ -52,6 +52,6 @@ def auth_login(user: LoginSchema, db: Annotated[Session, Depends(get_db)]):
 
 
 
-@router.post("/check")
+@router.post("/check", response_model=CheckResponse)
 def validate_token(user: Annotated[User, Depends(get_user)]):
     return {"email": user.email}

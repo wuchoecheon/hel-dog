@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter
 
 from typing import Annotated
@@ -9,12 +8,12 @@ from sqlalchemy.orm import Session
 from src.database import get_db
 from src.auth.models import User
 from src.device.utils import map_device_to_user
-from src.health.schemas import HealthDataSchema
+from src.health.schemas import HealthDataSchema, CreateHealthDataResponse
 from src.health.models import HealthData
 
 router = APIRouter(prefix="/api/health")
 
-@router.post("/{device_id}")
+@router.post("/{device_id}", response_model=CreateHealthDataResponse)
 def create_health_data(
     device_id: str,
     user: Annotated[User,Depends(map_device_to_user)],

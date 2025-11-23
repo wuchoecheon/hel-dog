@@ -8,3 +8,10 @@ class SleepLogSchema(BaseModel):
         if v is None:
             raise ValueError('empty value')
         return v
+
+class CreateSleepLogResponse(BaseModel):
+    response: str
+
+class GetSleepScoreResponse(BaseModel):
+    response: str
+    sleep_score: int
