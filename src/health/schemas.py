@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from pydantic import BaseModel, Field
 
@@ -7,3 +6,6 @@ class HealthDataSchema(BaseModel):
 	heart_rate_data: int = Field(alias="heartRateData")    
 	oxygen_saturation: float = Field(alias="oxygenSaturation")    
 	stress_level: str = Field(alias="stressLevel")
+
+class CreateHealthDataResponse(BaseModel):
+    response: str

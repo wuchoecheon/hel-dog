@@ -8,3 +8,6 @@ class RegisterSchema(BaseModel):
         if not v or not v.strip():
             raise ValueError('empty value')
         return v
+
+class RegisterRobotResponse(BaseModel):
+    response: str

@@ -6,13 +6,13 @@ from src.database import get_db
 from src.auth.models import User
 from src.auth.utils import get_user
 from src.device.models import Device
-from src.device.schemas import RegisterSchema
+from src.device.schemas import RegisterSchema, RegisterDeviceResponse # Updated import
 
 router = APIRouter(
     prefix="/api/device"
 )
 
-@router.post("/register")
+@router.post("/register", response_model=RegisterDeviceResponse) # Added response_model
 def register_device(
     body: RegisterSchema,
     user: Annotated[User, Depends(get_user)],
