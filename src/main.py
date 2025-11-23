@@ -14,6 +14,7 @@ from src.fall import router as fall_router
 from src.cough import router as cough_router
 from src.sleep import router as sleep_router
 from src.health import router as health_router
+from src.fcm import router as fcm_router
 
 
 app = FastAPI()
@@ -24,6 +25,7 @@ app.include_router(device_router)
 app.include_router(fall_router)
 app.include_router(cough_router)
 app.include_router(sleep_router)
+app.include_router(fcm_router)
 app.include_router(health_router)
 
 if __name__ == "__main__":
