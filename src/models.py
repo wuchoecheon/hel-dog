@@ -7,3 +7,4 @@ from src.fall.models import FallLog
 from src.cough.models import CoughLog
 from src.sleep.models import SleepLog
 from src.health.models import HealthData
+from src.fcm.models import FCM
