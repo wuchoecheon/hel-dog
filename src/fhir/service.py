@@ -12,7 +12,6 @@ from src.stress.service import summarize_stress_last_12h
 from src.sleep.service import summarize_sleep_last_7h
 from src.posture.service import summarize_posture_last_3h
 from src.fall.service import summarize_fall_last_24h
-from src.health.service import calc_health_score
 
 from .builder import build_fhir_bundle_xml
 
@@ -36,11 +35,6 @@ class PostureSummary:
 
 @dataclass
 class FallSummary:
-    last_fall_at: datetime | None
-    fall_count_24h: int
-
-@dataclass
-class HealthScoreSummary:
     last_fall_at: datetime | None
     fall_count_24h: int
 
