@@ -8,6 +8,8 @@ from src.auth.utils import get_user
 from src.device.utils import map_device_to_user
 
 from src.sleep.models import SleepLog
+from src.sleep.schemas import SleepLogSchema
+from src.sleep.service import summarize_sleep_last_7h
 from src.sleep.schemas import SleepLogSchema, CreateSleepLogResponse, GetSleepScoreResponse
 from src.sleep.utils import calc_sleep_score
 
@@ -38,12 +40,9 @@ def get_sleep_score(
         db: Session=Depends(get_db)
     ):
 
-    sleeps = db.query(SleepLog).filter(
-        SleepLog.user == user.email,
-        SleepLog.timestamp >= (datetime.now() - timedelta(hours=7))
-    ).all()
+    summary = summarize_sleep_last_7h(db, user.email)
 
     return {
         "response": "request proceed successfully",
-        "sleep_score": calc_sleep_score(sleeps)
+        **summary
     }

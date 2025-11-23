@@ -14,6 +14,7 @@ from src.fall import router as fall_router
 from src.cough import router as cough_router
 from src.sleep import router as sleep_router
 from src.health import router as health_router
+from src.fhir.router import router as fhir_router
 from src.fcm import router as fcm_router
 from src.posture import router as posture_router
 from src.stress import router as stress_router
@@ -28,11 +29,9 @@ app.include_router(cough_router)
 app.include_router(sleep_router)
 app.include_router(fcm_router)
 app.include_router(health_router)
-<<<<<<< HEAD
+app.include_router(fhir_router)
 app.include_router(posture_router)
-=======
 app.include_router(stress_router)
->>>>>>> 5ec2106 (stress: implement stress)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
