@@ -18,7 +18,7 @@ def export_sleep_retrain_npy(
     out_path: Union[str, Path],
 ):
 
-    out_path = Path(out_path)
+    out_path = Path("/app/model/")
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     start = datetime(year, month, 1, tzinfo=timezone.utc)
@@ -67,3 +67,11 @@ def export_sleep_retrain_npy(
 
     X = df[cols].astype("float32").values
     np.save(out_path, X)
+
+
+def export_stress_retrain_npy(
+    db: Session,
+    year: int,
+    month: int,
+    out_path: Union[str, Path],
+): pass

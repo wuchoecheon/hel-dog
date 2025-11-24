@@ -2,7 +2,7 @@ from pathlib import Path
 from src.database import SessionLocal
 from src.retrain.service import export_sleep_retrain_npy, export_stress_retrain_npy
 
-def run_monthly_export_npy(user_email: str, year: int, month: int):
+def run_monthly_export(user_email: str, year: int, month: int):
     db = SessionLocal()
     try:
         sleep_out = Path()
