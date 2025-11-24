@@ -25,3 +25,6 @@ class StressRetrainLogSchema(BaseModel):
     acc_mag_mean: float
     acc_mag_std: float
     wrist_temperature_c_mean: float = 0.0
+
+    class Config:
+        from_attributes = True
