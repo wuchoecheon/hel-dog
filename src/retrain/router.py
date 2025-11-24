@@ -33,8 +33,6 @@ def create_sleep_retrain_log(
         acc_z=payload.acc_z,
         hr=payload.hr,
         sleep_stage=payload.sleep_stage,
-        sao2=payload.sao2,
-        bvp=payload.bvp,
     )
     db.add(obj)
     db.commit()
@@ -59,7 +57,6 @@ def create_stress_retrain_log(
         acc_z_mean=payload.acc_z_mean,
         acc_mag_mean=payload.acc_mag_mean,
         acc_mag_std=payload.acc_mag_std,
-        wrist_temperature_c_mean=payload.wrist_temperature_c_mean,
     )
     db.add(obj)
     db.commit()

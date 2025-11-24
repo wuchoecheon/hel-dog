@@ -9,8 +9,6 @@ class SleepRetrainLogSchema(BaseModel):
     acc_z: float
     hr: float
     sleep_stage: int
-    sao2: float = 0.0
-    bvp: float = 0.0
 
     class Config:
         from_attributes = True
@@ -24,7 +22,6 @@ class StressRetrainLogSchema(BaseModel):
     acc_z_mean: float
     acc_mag_mean: float
     acc_mag_std: float
-    wrist_temperature_c_mean: float = 0.0
 
     class Config:
         from_attributes = True
