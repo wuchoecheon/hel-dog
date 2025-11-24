@@ -266,18 +266,18 @@ def create_meaningful_stress_logs(
 def make_meaningful_retrain_logs(
     year: int,
     month: int,
-    sleep_total: int = 14400,
-    stress_total: int = 1008,
+    sleep_total: int = 5,
+    stress_total: int = 5,
 ) -> None:
     headers = get_auth_headers()
     create_meaningful_sleep_logs(
-        headers,
+        headers=headers,
         year=year,
         month=month,
         total_count=sleep_total,
     )
     create_meaningful_stress_logs(
-        headers,
+        headers=headers,
         year=year,
         month=month,
         total_count=stress_total,
@@ -285,4 +285,4 @@ def make_meaningful_retrain_logs(
 
 
 if __name__ == "__main__":
-    make_meaningful_retrain_logs("user@example.com", 2025, 1)
+    make_meaningful_retrain_logs(2025, 11)
