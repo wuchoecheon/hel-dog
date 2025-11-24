@@ -124,7 +124,7 @@ def create_meaningful_sleep_logs(
     headers: dict,
     year: int,
     month: int,
-    total_count: int = 14_400,  # 딱 14,400개 생성
+    total_count: int = 14_400,
 ) -> None:
     """
     한 달 중 특정 날짜의 4시간짜리(14,400초) 수면 세션 1개 생성.
@@ -236,11 +236,11 @@ def create_meaningful_stress_logs(
     headers: dict,
     year: int,
     month: int,
-    total_count: int = 1_008,  # 1008개 정확히 생성
+    total_count: int = 4_320,
 ) -> None:
     """
     10분 간격 스트레스 로그 생성.
-    total_count 만큼 생성 (기본: 7일치 10분 간격 = 1008개)
+    total_count 만큼 생성
     """
     base_time = datetime(year, month, 1, 0, 0, tzinfo=timezone.utc)
 
@@ -266,8 +266,8 @@ def create_meaningful_stress_logs(
 def make_meaningful_retrain_logs(
     year: int,
     month: int,
-    sleep_total: int = 5,
-    stress_total: int = 5,
+    sleep_total: int = 14400,
+    stress_total: int = 4320,
 ) -> None:
     headers = get_auth_headers()
     create_meaningful_sleep_logs(
