@@ -64,9 +64,9 @@ def test_fhir_export_basic():
 
     client.post("/api/fall/robot")
 
-    #client.post("/api/stress/device")
+    client.post("/api/stress/device")
 
-    #client.post("/api/posture/robot")
+    client.post("/api/posture/robot")
 
     res = client.get(
         "/api/fhir/export",
@@ -94,5 +94,5 @@ def test_fhir_export_basic():
     assert "cough-3h" in obs_ids
     assert "sleep-7h" in obs_ids
     assert "fall-24h" in obs_ids
-    #assert "stress-count-12h" in obs_ids
-    #assert "posture-3h" in obs_ids
+    assert "stress-count-12h" in obs_ids
+    assert "posture-3h" in obs_ids
