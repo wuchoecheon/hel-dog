@@ -2,9 +2,12 @@ import pytest
 from fastapi.testclient import TestClient
 from src.main import app
 
+from src.fcm.utils import send_notification
+
 client = TestClient(app)
 
 uuid_sample = "c8ebf2fd-8284-4070-9f3e-82c904f43de7"
+fcm_token_sample="fill_me"
 
 def get_token(email="user@example.com", password="asdf1234"):
     _ = client.post(
@@ -46,3 +49,8 @@ def test_fcm_register():
     )
 
     assert response.status_code == 200
+
+
+def test_fcm_sendnotification():
+    print(send_notification(fcm_token=fcm_token_sample, title="sample title", body="this is body"))
+    assert True == False
