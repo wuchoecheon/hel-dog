@@ -1,7 +1,7 @@
 from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from src.retrain.task import run_monthly_export_npy
+from src.retrain.task import run_monthly_export
 
 scheduler = BackgroundScheduler()
 
@@ -13,7 +13,7 @@ def schedule_monthly_job():
         month = 12
         year -= 1
 
-    run_monthly_export_npy(user_email="test@test.com", year=year, month=month)
+    run_monthly_export(user_email="user@example.com", year=year, month=month)
 
 def start_scheduler():
     scheduler.add_job(

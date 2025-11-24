@@ -15,9 +15,7 @@ class SleepRetrainLog(Base):
     acc_y = Column(Float, nullable=False)
     acc_z = Column(Float, nullable=False)
     hr = Column(Float, nullable=False)
-    sleep_stage = Column(Integer, nullable=False)
-    sao2 = Column(Float, nullable=False, server_default="0")
-    bvp = Column(Float, nullable=False, server_default="0")
+    sleep_stage = Column(Integer, nullable=False) # 0: Wake, 1: NREM1, 2: NREM2, 3: NREM3, 4: REM
 
 class StressRetrainLog(Base):
     __tablename__ = "stress_retrain_log"
@@ -32,5 +30,4 @@ class StressRetrainLog(Base):
     acc_z_mean = Column(Float, nullable=False)
     acc_mag_mean = Column(Float, nullable=False)
     acc_mag_std = Column(Float, nullable=False)
-    wrist_temperature_c_mean = Column(Float, nullable=False, server_default="0")
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())

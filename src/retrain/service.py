@@ -46,8 +46,6 @@ def export_sleep_retrain_npy(
             "ACC_Z": log.acc_z,
             "HR": log.hr,
             "Sleep_Stage": log.sleep_stage,
-            "SAO2": log.sao2,
-            "BVP": log.bvp,
         }
         for log in logs
     ])
@@ -59,8 +57,6 @@ def export_sleep_retrain_npy(
         "ACC_Z",
         "HR",
         "Sleep_Stage",
-        "SAO2",
-        "BVP",
     ]
 
     X = df[cols].astype("float32").values
@@ -107,7 +103,6 @@ def export_stress_retrain_npy(
                 "acc_z_mean": log.acc_z_mean,
                 "acc_mag_mean": log.acc_mag_mean,
                 "acc_mag_std": log.acc_mag_std,
-                "wrist_temperature_c_mean": log.wrist_temperature_c_mean,
             }
             for log in logs
         ]
@@ -122,7 +117,6 @@ def export_stress_retrain_npy(
         "acc_z_mean",
         "acc_mag_mean",
         "acc_mag_std",
-        "wrist_temperature_c_mean",
     ]
 
     X = df[cols].astype("float32").values
