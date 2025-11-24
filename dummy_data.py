@@ -1,12 +1,8 @@
 import os
 import random
-<<<<<<< HEAD
-from datetime import datetime, timedelta, timezone
-=======
 import calendar
 from datetime import datetime, timedelta, timezone
 from typing import List
->>>>>>> 31325310955225c4ab62fe288311be853f46c945
 
 import httpx
 from httpx import ConnectError
@@ -18,13 +14,10 @@ EMAIL = os.getenv("DUMMY_EMAIL", "user@example.com")
 PASSWORD = os.getenv("DUMMY_PASSWORD", "asdf1234")
 
 
-<<<<<<< HEAD
-=======
 # ============================================================
 # 0. 공통: 로그인해서 Authorization 헤더 얻기
 # ============================================================
 
->>>>>>> 31325310955225c4ab62fe288311be853f46c945
 def get_auth_headers(email: str = EMAIL, password: str = PASSWORD) -> dict:
     """Sign up (idempotent) and return Authorization header."""
     try:
@@ -49,64 +42,6 @@ def get_auth_headers(email: str = EMAIL, password: str = PASSWORD) -> dict:
         ) from exc
 
 
-<<<<<<< HEAD
-def random_sleep_payload(sleep_start_time: datetime, idx: int) -> dict:
-    timestamp_ms = min(36000, idx * 1000 + random.randint(0, 1000))  # 0 ~ 36s offset
-    return {
-        "sleep_start_time": sleep_start_time.isoformat(),
-        "timestamp": timestamp_ms,
-        "acc_x": round(random.uniform(-2.0, 2.0), 3),
-        "acc_y": round(random.uniform(-2.0, 2.0), 3),
-        "acc_z": round(random.uniform(-2.0, 2.0), 3),
-        "hr": round(random.uniform(55, 110), 2),
-        "sleep_stage": random.choice([0, 1, 2, 3, 4]),
-        "sao2": round(random.uniform(92, 100), 2),
-        "bvp": round(random.uniform(0.0, 5.0), 3),
-    }
-
-
-def random_stress_payload() -> dict:
-    return {
-        "heart_rate_bpm": round(random.uniform(55, 130), 2),
-        "hrv_sdnn_ms": round(random.uniform(20, 120), 2),
-        "hrv_rmssd_ms": round(random.uniform(15, 110), 2),
-        "acc_x_mean": round(random.uniform(-1.5, 1.5), 3),
-        "acc_y_mean": round(random.uniform(-1.5, 1.5), 3),
-        "acc_z_mean": round(random.uniform(-1.5, 1.5), 3),
-        "acc_mag_mean": round(random.uniform(0.0, 3.0), 3),
-        "acc_mag_std": round(random.uniform(0.0, 1.0), 3),
-        "wrist_temperature_c_mean": round(random.uniform(31.0, 36.5), 2),
-    }
-
-
-def send_sleep_logs(headers: dict, count: int = 10):
-    sleep_start = datetime.now(timezone.utc) - timedelta(hours=1)
-    with httpx.Client(base_url=API_BASE_URL, headers=headers, timeout=10.0) as client:
-        for idx in range(count):
-            payload = random_sleep_payload(sleep_start, idx)
-            resp = client.post("/api/retrain/sleep", json=payload)
-            resp.raise_for_status()
-            print(f"[sleep] sent #{idx+1}: {resp.json()}")
-
-
-def send_stress_logs(headers: dict, count: int = 1000):
-    with httpx.Client(base_url=API_BASE_URL, headers=headers, timeout=10.0) as client:
-        for idx in range(count):
-            payload = random_stress_payload()
-            resp = client.post("/api/retrain/stress", json=payload)
-            resp.raise_for_status()
-            print(f"[stress] sent #{idx+1}: {resp.json()}")
-
-
-def main():
-    headers = get_auth_headers()
-    send_sleep_logs(headers)
-    send_stress_logs(headers)
-
-
-if __name__ == "__main__":
-    main()
-=======
 # ============================================================
 # 1. SLEEP 더미 생성 로직 (Wake, N1, N2, N3, REM)
 #    → random_sleep_payload 에서 사용
@@ -189,7 +124,7 @@ def create_meaningful_sleep_logs(
     headers: dict,
     year: int,
     month: int,
-    total_count: int = 14_400,  # 딱 14,400개 생성
+    total_count: int = 14_400,
 ) -> None:
     """
     한 달 중 특정 날짜의 4시간짜리(14,400초) 수면 세션 1개 생성.
@@ -301,11 +236,11 @@ def create_meaningful_stress_logs(
     headers: dict,
     year: int,
     month: int,
-    total_count: int = 1_008,  # 1008개 정확히 생성
+    total_count: int = 4_320,
 ) -> None:
     """
     10분 간격 스트레스 로그 생성.
-    total_count 만큼 생성 (기본: 7일치 10분 간격 = 1008개)
+    total_count 만큼 생성
     """
     base_time = datetime(year, month, 1, 0, 0, tzinfo=timezone.utc)
 
@@ -332,17 +267,17 @@ def make_meaningful_retrain_logs(
     year: int,
     month: int,
     sleep_total: int = 14400,
-    stress_total: int = 1008,
+    stress_total: int = 4320,
 ) -> None:
     headers = get_auth_headers()
     create_meaningful_sleep_logs(
-        headers,
+        headers=headers,
         year=year,
         month=month,
         total_count=sleep_total,
     )
     create_meaningful_stress_logs(
-        headers,
+        headers=headers,
         year=year,
         month=month,
         total_count=stress_total,
@@ -350,5 +285,4 @@ def make_meaningful_retrain_logs(
 
 
 if __name__ == "__main__":
-    make_meaningful_retrain_logs("user@example.com", 2025, 1)
->>>>>>> 31325310955225c4ab62fe288311be853f46c945
+    make_meaningful_retrain_logs(2025, 11)
