@@ -15,7 +15,7 @@ def export_sleep_retrain_npy(
     out_path: Union[str, Path],
 ):
 
-    out_path = Path("/app/model/")
+    out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     start = datetime(year, month, 1, tzinfo=timezone.utc)
