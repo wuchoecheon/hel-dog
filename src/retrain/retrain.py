@@ -7,7 +7,7 @@ from typing import Dict, Optional, Tuple
 
 import numpy as np
 
-from src.stress import retrain as stress_retrain
+from stress import *
 
 BASE_MODEL_DIR = Path("/app/model")
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -379,15 +379,15 @@ def run_stress_retrain(
         history_path=out_dir / f"cnn_gru_phase2_finetuned_{run_token}_history.json",
     )
 
-    stress_retrain.set_seed(args.seed)
-    device = stress_retrain.select_device(args.device)
+    set_seed(args.seed)
+    device = select_device(args.device)
 
     features = stress_matrix.astype(np.float32)
-    labels = stress_retrain.derive_labels_from_heuristics(features, args)
-    normalizer = stress_retrain.FeatureNormalizer.fit(features)
+    labels = derive_labels_from_heuristics(features, args)
+    normalizer = FeatureNormalizer.fit(features)
 
-    model = stress_retrain.CNNGRUStressClassifier(input_dim=features.shape[1])
-    checkpoint_normalizer = stress_retrain.maybe_load_checkpoint(
+    model = CNNGRUStressClassifier(input_dim=features.shape[1])
+    checkpoint_normalizer = maybe_load_checkpoint(
         model,
         args.base_model_path,
         device,
@@ -396,20 +396,20 @@ def run_stress_retrain(
         normalizer = checkpoint_normalizer
 
     normalized = normalizer.transform(features)
-    sequences, window_labels = stress_retrain.build_windows(
+    sequences, window_labels = build_windows(
         normalized,
         labels,
         args.sequence_length,
         args.sequence_stride,
         args.window_label_strategy,
     )
-    train_dataset, val_dataset = stress_retrain.split_datasets(
+    train_dataset, val_dataset = split_datasets(
         sequences,
         window_labels,
         args.val_split,
         args.seed,
     )
-    train_loader, val_loader = stress_retrain.create_dataloaders(
+    train_loader, val_loader = create_dataloaders(
         train_dataset,
         val_dataset,
         args.batch_size,
@@ -419,18 +419,18 @@ def run_stress_retrain(
 
     model.to(device)
     if args.freeze_cnn:
-        stress_retrain.freeze_module(model.feature_extractor)
+        freeze_module(model.feature_extractor)
     if args.freeze_gru:
-        stress_retrain.freeze_module(model.temporal_encoder)
+        freeze_module(model.temporal_encoder)
 
-    history = stress_retrain.train_model(
+    history = train_model(
         model,
         train_loader,
         val_loader,
         device,
         args,
     )
-    stress_retrain.save_checkpoint(model, normalizer, history, args)
+    save_checkpoint(model, normalizer, history, args)
     print("[STRESS] 재학습 완료")
 
     return {
@@ -468,3 +468,16 @@ def run_all_retrainings(
         seed=seed,
     )
     return {"sleep": sleep_result, "stress": stress_result}
+
+sleep_npy_path = "model/sleep_user@example.com_202511.npy"
+stress_npy_path = "model/stress_user@example.com_202511.npy"
+
+sleep_data = np.load(sleep_npy_path)
+stress_data = np.load(stress_npy_path)
+
+run_all_retrainings(
+    sleep_matrix=sleep_data,
+    stress_matrix=stress_data,
+    year=2025,
+    month=11
+)
