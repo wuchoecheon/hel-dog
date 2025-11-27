@@ -7,6 +7,7 @@ from src.auth.models import User
 from src.auth.utils import get_user
 from src.fcm.models import FCM
 from src.fcm.schemas import FCMRegisterSchema
+from src.fcm.utils import send_notification
 
 router = APIRouter(
     prefix="/api/fcm"
@@ -24,5 +25,20 @@ def fcm_register(body: FCMRegisterSchema, user: Annotated[User, Depends(get_user
     db.add(db_fcm)
     db.commit()
     db.refresh(db_fcm)
+
+    return {"response": "register success!"}
+
+
+@router.post("/test")
+def fcm_register(user: Annotated[User, Depends(get_user)], db: Session=Depends(get_db)):
+    fcm_token = db.query(FCM).filter(FCM.owner == user.email).first()
+    if not fcm_token:
+        return HTTPException(400, "fcm token does not exists")
+
+    send_notification(
+        fcm_token=fcm_token,
+        title="FCM test",
+        body="Was it successful?"
+    )
 
     return {"response": "register success!"}
