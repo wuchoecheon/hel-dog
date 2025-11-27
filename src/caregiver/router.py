@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from src.database import get_db
 from src.auth.utils import get_user
-from src.user.models import User # Assuming User model path
+from src.auth.models import User
 from . import models, schemas
 
 router = APIRouter(
