@@ -38,3 +38,6 @@ Thumbs.db
 
 # Secret Directory
 secret/
+model/*.pt
+model/*.keras
+model/*.json
