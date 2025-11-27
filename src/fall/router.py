@@ -82,9 +82,7 @@ def response_to_fall(
 
     fall_log.responsed = True
 
-    db.add(fall_log)
     db.commit()
-    db.refresh(fall_log)
 
     return {
         "response": "response received successfully"
