@@ -8,6 +8,9 @@ class CreateFallLogResponse(BaseModel):
 class FallLogEntry(BaseModel):
     timestamp: datetime # Corrected: not Optional
 
+class FallResponseEntry(BaseModel):
+    id: int 
+
 class GetFallLogResponse(BaseModel):
     response: str
     fall_num: int
