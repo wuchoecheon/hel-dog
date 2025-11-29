@@ -15,7 +15,11 @@ router = APIRouter(
 
 @router.post("/register")
 def fcm_register(body: FCMRegisterSchema, user: Annotated[User, Depends(get_user)], db: Session=Depends(get_db)):
-    
+    fcm_token = body.fcm_token
+    if db.query.get(fcm_token):
+        return HTTPException(400, "FCM token already exists")
+
+
     db_fcm = FCM(
         uuid=body.uuid,
         fcm_token=body.fcm_token,
@@ -30,15 +34,17 @@ def fcm_register(body: FCMRegisterSchema, user: Annotated[User, Depends(get_user
 
 
 @router.post("/test")
-def fcm_register(user: Annotated[User, Depends(get_user)], db: Session=Depends(get_db)):
+def fcm_notification_test(user: Annotated[User, Depends(get_user)], db: Session=Depends(get_db)):
     fcm_token = db.query(FCM).filter(FCM.owner == user.email).first()
     if not fcm_token:
         return HTTPException(400, "fcm token does not exists")
 
-    send_notification(
+    response = send_notification(
         fcm_token=fcm_token,
         title="FCM test",
         body="Was it successful?"
     )
 
-    return {"response": "register success!"}
+    print(response)
+
+    return {"response": "notification sent"}
