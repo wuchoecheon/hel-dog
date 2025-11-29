@@ -48,7 +48,7 @@ def get_cough_log(
 
 
 
-@router.post("/detail", response_model=GetCoughLogDetailResponse) # Added response_model
+@router.get("/detail", response_model=GetCoughLogDetailResponse) # Added response_model
 def get_cough_log_detail(
         user: User=Depends(get_user),
         db: Session=Depends(get_db)
