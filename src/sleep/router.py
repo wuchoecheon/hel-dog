@@ -9,7 +9,7 @@ from src.device.utils import map_device_to_user
 
 from src.sleep.models import SleepLog
 from src.sleep.schemas import SleepLogSchema
-from src.sleep.service import summarize_sleep_last_7h
+from src.sleep.service import summarize_sleep_last_7h, summarize_sleep_last_week
 from src.sleep.schemas import SleepLogSchema, CreateSleepLogResponse, GetSleepScoreResponse
 from src.sleep.utils import calc_sleep_score
 
@@ -41,6 +41,19 @@ def get_sleep_score(
     ):
 
     summary = summarize_sleep_last_7h(db, user.email)
+
+    return {
+        "response": "request proceed successfully",
+        **summary
+    }
+
+@router.get("/detail")
+def get_sleep_weekly(
+    user: Annotated[User, Depends(get_user)],
+    db: Session=Depends(get_db),
+):
+    # 최근 7일 하루 단위 수면 점수
+    summary = summarize_sleep_last_week(db, user.email)
 
     return {
         "response": "request proceed successfully",

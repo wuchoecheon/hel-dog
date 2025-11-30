@@ -29,31 +29,48 @@ def summarize_stress_last_12h(db: Session, user_email: str):
     }
 
 
-def summarize_stress_today_by_hour(db: Session, user_email: str):
-    hour = func.date_trunc("hour", StressLog.timestamp)
+def summarize_stress_last_week(db: Session, user_email: str):
+    now = datetime.now(timezone.utc)
+    today = now.date()
+    start_date = today - timedelta(days=6)
+
+    day_col = func.date(StressLog.timestamp)
 
     rows = (
         db.query(
-            hour.label("hour"),
+            day_col.label("day"),
             func.count(StressLog.id).label("count"),
         )
         .filter(
             StressLog.user == user_email,
-            func.date(StressLog.timestamp) == func.current_date(),
+            day_col >= start_date,
+            day_col <= today,
         )
-        .group_by("hour")
-        .order_by("hour")
+        .group_by("day")
+        .order_by("day")
         .all()
     )
 
-    stress_log = [
-        {
-            "hour": row.hour.isoformat(),
-            "count": row.count,
+    day_stats = {}
+    for i in range(7):
+        d = start_date + timedelta(days=i)
+        day_stats[d.isoformat()] = {
+            "date": d.isoformat(),
+            "total": 0,
         }
-        for row in rows
+
+    for row in rows:
+        day_str = row.day.isoformat()
+        count = row.count
+        day_stats[day_str]["total"] += count
+
+    days = [
+        day_stats[(start_date + timedelta(days=i)).isoformat()]
+        for i in range(7)
     ]
 
     return {
-        "stress_hourly_log": stress_log
+        "start_date": start_date.isoformat(),
+        "end_date": today.isoformat(),
+        "days": days,
     }

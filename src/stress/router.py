@@ -11,7 +11,7 @@ from src.stress.models import StressLog
 
 from src.stress.service import (
     summarize_stress_last_12h,
-    summarize_stress_today_by_hour,
+    summarize_stress_last_week,
 )
 
 router = APIRouter(
@@ -55,8 +55,8 @@ def get_stress_log_detail(
     db: Session = Depends(get_db),
 ):
 
-    # 시간대별 스트레스 횟수
-    summary = summarize_stress_today_by_hour(db, user.email)
+    # 최근 7일 하루 단위 스트레스 횟수
+    summary = summarize_stress_last_week(db, user.email)
 
     return {
         "response": "request proceeded successfully",
