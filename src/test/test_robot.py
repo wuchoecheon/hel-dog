@@ -4,7 +4,7 @@ from src.main import app
 
 client = TestClient(app)
 
-def get_token(email="user@example.com", password="asdf1234"):
+def get_token(email="hi@naver.com", password="123"):
     _ = client.post(
         "/api/auth/signup",
         json={
@@ -98,7 +98,7 @@ def test_delete_unexisting_robot():
 
 def test_delete_other_user_robot():
     headers_reg = get_token()
-    headers_del = get_token(email="user2@example.com")
+    headers_del = get_token(email="hi@naver.com")
 
     register = client.post(
         "/api/robot/register",

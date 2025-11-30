@@ -5,20 +5,20 @@ from datetime import datetime, timedelta
 
 client = TestClient(app)
 
-def get_token(email="user@example.com"):
+def get_token(email="hi@naver.com"):
     _ = client.post(
         "/api/auth/signup",
         json={
             "email": email,
-            "password": "asdf1234",
-            "password2": "asdf1234",
+            "password": "123",
+            "password2": "123",
         }
     )
     login = client.post(
         "/api/auth/login",
         json={
             "email": email,
-            "password": "asdf1234",
+            "password": "123",
         }
     )
 
@@ -65,7 +65,7 @@ def test_fall_log_invalid_robot():
     assert response.status_code == 400
 
 def test_get_fall_today():
-    headers = get_token(email="user2@example.com")
+    headers = get_token(email="hi@naver.com")
 
     robot_id = "fall2"
     register_robot(robot_id, headers=headers)

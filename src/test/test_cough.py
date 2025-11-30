@@ -8,17 +8,17 @@ def get_token():
     _ = client.post(
         "/api/auth/signup",
         json={
-            "email": "user@example.com",
-            "password": "asdf1234",
-            "password2": "asdf1234",
+            "email": "hi@naver.com",
+            "password": "123",
+            "password2": "123",
         }
     )
 
     login = client.post(
         "/api/auth/login",
         json={
-            "email": "user@example.com",
-            "password": "asdf1234",
+            "email": "hi@naver.com",
+            "password": "123",
         }
     )
 
@@ -70,4 +70,4 @@ def test_get_cough_log():
 
     assert response.status_code == 200
     assert body["cough_num"] == NUM+1
-    assert body["cough_log"][0]['user'] == "user@example.com"
+    assert body["cough_log"][0]['user'] == "hi@naver.com"

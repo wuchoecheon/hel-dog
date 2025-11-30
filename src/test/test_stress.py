@@ -9,8 +9,8 @@ def get_token(email: str):
         "/api/auth/signup",
         json={
             "email": email,
-            "password": "asdf1234",
-            "password2": "asdf1234",
+            "password": "123",
+            "password2": "123",
         }
     )
 
@@ -18,7 +18,7 @@ def get_token(email: str):
         "/api/auth/login",
         json={
             "email": email,
-            "password": "asdf1234",
+            "password": "123",
         }
     )
 
@@ -43,7 +43,7 @@ def setup(device_id: str, email: str):
 
 def test_stress_log():
     device_id = "device_stress1"
-    email = "user1@example.com"
+    email = "hi@naver.com"
     setup(device_id, email)
 
     response = client.post(
@@ -54,7 +54,7 @@ def test_stress_log():
 
 def test_get_stress_status_false():
     device_id = "device_stress2"
-    email = "user2@example.com"
+    email = "hi@naver.com"
     token = setup(device_id, email)
 
     client.post(
@@ -74,7 +74,7 @@ def test_get_stress_status_false():
 
 def test_get_stress_status_true():
     device_id = "device_stress3"
-    email = "user3@example.com"
+    email = "hi@naver.com"
     token = setup(device_id, email)
 
     client.post(

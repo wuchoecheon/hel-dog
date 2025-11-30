@@ -9,7 +9,7 @@ client = TestClient(app)
 uuid_sample = "c8ebf2fd-8284-4070-9f3e-82c904f43de7"
 fcm_token_sample="fill_me"
 
-def get_token(email="user@example.com", password="asdf1234"):
+def get_token(email="hi@naver.com", password="123"):
     _ = client.post(
         "/api/auth/signup",
         json={
