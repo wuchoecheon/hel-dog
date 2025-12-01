@@ -1,5 +1,5 @@
 # src/cough/service.py
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,timezone
 from sqlalchemy.orm import Session
 
 from src.cough.models import CoughLog
@@ -29,7 +29,7 @@ def summarize_cough_last_week(
     db: Session,
     user_email: str,
 ) -> dict:
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     one_week_ago = now - timedelta(days=7)
 
     coughs = (
